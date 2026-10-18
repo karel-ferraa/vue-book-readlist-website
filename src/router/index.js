@@ -1,40 +1,34 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import LibraryView from '@/views/LibraryView.vue'
+import FavoritesView from '@/views/FavoritesView.vue'
+import ExploreView from '@/views/ExploreView.vue'
+import BookDetailsView from '@/views/BookDetailsView.vue'
 
+// Each page has a "book/:id" child route that opens the book in a panel
+// next to the grid ("Open Book View" in our Figma prototype).
 const routes = [
-	{
-		path: "/",
-		name: "index",
-		component: () => import("../views/HomeView.vue"),
-	},
-	{
-		path: "/home",
-		name: "home",
-		component: () => import("../views/HomeView.vue"),
-	},
-	{
-		path: "/favorites",
-		name: "favorites",
-		component: () => import("../views/HomeView.vue"),
-	},
-	{
-		path: "/explore",
-		name: "explore",
-		component: () => import("../views/ExploreView.vue"),
-	},
-	{
-		path: "/not-found",
-		name: "not-found",
-		component: () => import("../views/NotFound.vue"),
-	},
-	{
-		path: "/:catchAll(.*)",
-		name: "not-found",
-		component: () => import("../views/NotFound.vue"),
-	},
+  { path: '/', redirect: '/library' },
+  {
+    path: '/library',
+    name: 'library',
+    component: LibraryView,
+    children: [{ path: 'book/:id', name: 'library-book', component: BookDetailsView, props: true }],
+  },
+  {
+    path: '/favorites',
+    name: 'favorites',
+    component: FavoritesView,
+    children: [{ path: 'book/:id', name: 'favorites-book', component: BookDetailsView, props: true }],
+  },
+  {
+    path: '/explore',
+    name: 'explore',
+    component: ExploreView,
+    children: [{ path: 'book/:id', name: 'explore-book', component: BookDetailsView, props: true }],
+  },
 ]
-const router = createRouter({
-	history: createWebHistory(),
-	routes
-})
 
-export default router
+export default createRouter({
+  history: createWebHistory(),
+  routes,
+})
